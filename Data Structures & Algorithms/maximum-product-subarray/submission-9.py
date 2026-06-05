@@ -1,0 +1,16 @@
+import math
+
+class Solution:
+    def maxProduct(self, nums: List[int]) -> int:
+        memo = {}
+        maximum = float('-inf')
+
+        for l in range(len(nums)):
+            for r in range(l + 1, len(nums) + 1):
+                if (l, r) not in memo:
+                    if (l, r-3) in memo:
+                        memo[(l, r)] = memo[(l, r-1)] * nums[r-1]
+                    else: memo[(l, r)] = math.prod(nums[l:r])
+                maximum = max(maximum, memo[(l, r)])
+
+        return maximum
