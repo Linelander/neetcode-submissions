@@ -1,0 +1,24 @@
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        memo = {}
+
+        def dfs(i, buying):
+            if i >= len(prices):
+                return 0
+            if (i, buying) in memo:
+                return memo[(i, buying)]
+
+            cooldown = dfs(i+1, buying)
+            
+            # the addition / subtraction is split across
+            # recursion
+
+            if buying: # buy case
+                buy = dfs(i+1, not buying) - prices[i]
+                memo[(i, buying)] = max(cooldown, buy)
+            else: # sell case
+                sell = dfs(i + 2, True) + prices[i]
+                memo[(i, buying)] = max(cooldown, sell)
+            return memo[(i, buying)]
+
+        return dfs(0, True)
